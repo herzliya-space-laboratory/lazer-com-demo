@@ -1,5 +1,6 @@
 #include <stepperMotor.h>
 #include <boardInterface.h>
+#include "arduinoSerial.h"
 
 
 #define MOTOR_IN1 PINS::pin11
@@ -21,10 +22,12 @@ void loop()
   digitalWriteTo(PINS::LEDBuiltIn, PinState::low);
   delayMilliseconds(50);
   
-  motor.spinToAngle(180);
-  motor.spinToAngle(0);
-  motor.spinToAngle(360);
-  motor.spinToAngle(0);
+  arduinoSerial ardSerial = new arduinoSerial();
+  char* buff;
+  ardSerial.establishConnection(9600);
+  ardSerial.readData(&buff);
+  motor.spinToAngle((int)buff);
+  ardSerial.sendData("sucssess");
 }
 
 int main()
